@@ -1,84 +1,106 @@
-#include <algorithm>
 #include <iostream>
-#include <string>
-#include <map>
 #include <vector>
+#include <algorithm>
+#include <map>
+#include <string>
 
 using namespace std;
 
-void Sort(vector<char>& c)
+map<char, int> BuildCharCounters(string& s, char c)
 {
-	sort(begin(c), end(c));
-}
+	map<char, int> m;
 
-void PrintMap(const map<string, string>& m)
-{
-	for (auto item : m) {
-		cout << item.first << " " << item.second << endl;
-	}
-}
-
-void PrintVector(const vector<char>& c)
-{
-	for (auto item : c) {
-		cout << item << " ";
-	}
-}
-
-void PrintVector(const vector<string>& c)
-{
-	for (auto item : c) {
-		cout << item << endl;
-	}
-}
-
-bool Equality(const vector<char>& f, const vector<char>& s)
-{
-	if (f.size() != s.size())
-		return false;
-	else {
-		for (int i = 0; i < f.size(); i++) {
-			if (f[i] == s[i]) {
-				i++;
-			} else {
-				return false;
-			}
+	int j = 0;
+	for (int i = 0; i < s.size(); i++) {
+		s[i] = tolower(s[i]);
+		c = tolower(c);
+		if (s[i] == c) {
+			j++;
 		}
 	}
-	return true;
+
+	m[c] = j;
+
+	return m;
 }
 
-vector<char> VectorCharSort(const string& s)
+string FirstItemMapToString(string s)
 {
-	vector<char> c;
-	for (int i = 0; i < s.size(); i++) {
-		c.push_back(tolower(s[i]));
-	}
-	Sort(c);
+	map<char, int> end;
 
-	return c;
+	for (int i = 0; i < s.size(); i++) {
+		map<char, int> start = BuildCharCounters(s, s[i]);
+		for (auto item : start) {
+			end[item.first] = item.second;
+		}
+		start.clear();
+	}
+
+	string output;
+	for (auto item : end) {
+		output += item.first;
+	}
+
+	return output;
 }
 
-vector<string> CreateMap(int n)
+
+string SecondItemMapToString(string s)
+{
+	map<char, int> end;
+
+	for (int i = 0; i < s.size(); i++) {
+		map<char, int> start = BuildCharCounters(s, s[i]);
+		for (auto item : start) {
+			end[item.first] = item.second;
+		}
+		start.clear();
+	}
+
+	string output;
+	for (auto item : end) {
+		item.second += '0';
+		output += item.second;
+	}
+
+	return output;
+}
+
+void PrintMap(const map<char, int>& m)
+{
+	for (auto item : m) {
+		cout << item.first << "->" << item.second << endl;
+	}
+}
+
+map<string, string> CreateMap(int n)
 {
 	string f, s;
-	vector<string> v;
+	map<string, string> m;
+
 	for (int i = 0; i < n; i++) {
 		cin >> f >> s;
-		if (Equality(VectorCharSort(f), VectorCharSort(s)) == 1)
-			v.push_back("YES");
-		else
-			v.push_back("NO");
+		m[f] = s;
 	}
-	return v;
+
+	return m;
 }
 
 int main()
 {
 	int n;
 	cin >> n;
-	vector<string> v = CreateMap(n);
-	PrintVector(v);
+
+	map<string, string> m = CreateMap(n);
+
+	for (auto item : m) {
+		if (FirstItemMapToString(item.first) == FirstItemMapToString(item.second) &&
+			SecondItemMapToString(item.first) == SecondItemMapToString(item.second)) {
+			cout << "YES" << endl;
+		} else {
+			cout << "NO" << endl;
+		}
+	}
 
 	return 0;
 }
