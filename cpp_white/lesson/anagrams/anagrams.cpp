@@ -6,15 +6,15 @@
 
 using namespace std;
 
-map<char, int> BuildCharCounters(string& s, char c)
+map<char, int> BuildCharCounters(const string& s, char& c)
 {
 	map<char, int> m;
 
 	int j = 0;
-	for (int i = 0; i < s.size(); i++) {
-		s[i] = tolower(s[i]);
+	for (auto i : s) {
+		i = tolower(i);
 		c = tolower(c);
-		if (s[i] == c) {
+		if (i == c) {
 			j++;
 		}
 	}
@@ -24,45 +24,51 @@ map<char, int> BuildCharCounters(string& s, char c)
 	return m;
 }
 
-string FirstItemMapToString(string s)
+string FirstItemMapToString(const string& s)
 {
+	map<char, int> start;
 	map<char, int> end;
-
-	for (int i = 0; i < s.size(); i++) {
-		map<char, int> start = BuildCharCounters(s, s[i]);
+	
+	for (auto el : s) {
+		start = BuildCharCounters(s, el);
 		for (auto item : start) {
 			end[item.first] = item.second;
 		}
 		start.clear();
 	}
 
-	string output;
+	string output = "";
 	for (auto item : end) {
 		output += item.first;
 	}
-
+	
+	start.clear();
+	end.clear();
 	return output;
 }
 
 
-string SecondItemMapToString(string s)
+string SecondItemMapToString(const string& s)
 {
+	map<char, int> start;
 	map<char, int> end;
 
-	for (int i = 0; i < s.size(); i++) {
-		map<char, int> start = BuildCharCounters(s, s[i]);
+	for (auto el : s) {
+		start = BuildCharCounters(s, el);
 		for (auto item : start) {
 			end[item.first] = item.second;
 		}
 		start.clear();
 	}
 
-	string output;
+	string output = "";
 	for (auto item : end) {
 		item.second += '0';
 		output += item.second;
 	}
 
+	start.clear();
+	end.clear();
 	return output;
 }
 
@@ -73,17 +79,34 @@ void PrintMap(const map<char, int>& m)
 	}
 }
 
-map<string, string> CreateMap(int n)
+void PrintVector(const vector<string>& v)
+{
+	for (auto item : v) {
+		cout << item << endl;
+	}
+}
+
+vector<string> VectorAnswers(int n)
 {
 	string f, s;
 	map<string, string> m;
-
+	vector<string> answers;
 	for (int i = 0; i < n; i++) {
 		cin >> f >> s;
 		m[f] = s;
+		for (auto item : m) {
+			if (FirstItemMapToString(item.first) == FirstItemMapToString(item.second) &&
+				SecondItemMapToString(item.first) == SecondItemMapToString(item.second)) {
+				answers.push_back("YES");
+			} else {
+				answers.push_back("NO");
+			}
+		}
+		m.clear();
 	}
-
-	return m;
+	
+	m.clear();
+	return answers;
 }
 
 int main()
@@ -91,16 +114,9 @@ int main()
 	int n;
 	cin >> n;
 
-	map<string, string> m = CreateMap(n);
+	vector<string> answers = VectorAnswers(n);
 
-	for (auto item : m) {
-		if (FirstItemMapToString(item.first) == FirstItemMapToString(item.second) &&
-			SecondItemMapToString(item.first) == SecondItemMapToString(item.second)) {
-			cout << "YES" << endl;
-		} else {
-			cout << "NO" << endl;
-		}
-	}
+	PrintVector(answers);
 
 	return 0;
 }
