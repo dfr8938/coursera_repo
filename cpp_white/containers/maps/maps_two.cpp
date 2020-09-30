@@ -40,5 +40,20 @@ int main()
 	}
 
 	PrintMap(counters);
+
+	cout << endl;
+
+	vector<string> w = {"one", "two", "three"};
+	map<char, vector<string>> grouped_words;
+	for (const auto& item : w) {
+		grouped_words[item[0]].push_back(item);
+	}
+	for (const auto& i : grouped_words) {
+		cout << i.first << endl;
+		for (const auto& s : i.second) {
+			cout << s << " ";
+		}
+		cout << endl;
+	}
 	return 0;
 }
