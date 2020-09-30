@@ -2,19 +2,20 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <vector>
 
 using namespace std;
 
 void PrintMap(const map<int, string>& m)
 {
-	for (auto item : m) {
+	for (const auto& item : m) {
 		cout << item.first << ": " << item.second << endl;
 	}
 }
 
 void PrintMap(const map<string, int>& m)
 {
-	for (auto item : m) {
+	for (const auto& item : m) {
 		cout << item.first << ": " << item.second << endl;
 	}
 }
@@ -24,7 +25,7 @@ map<string, int> BuildReverseMap(const map<int, string>& m)
 {
 	map<string, int> result;
 
-	for (auto item : m) {
+	for (const auto& item : m) {
 		result[item.second] = item.first;
 	}
 
@@ -55,6 +56,25 @@ int main()
 	cout << endl;
 
 	PrintMap(r_events);
+
+	map<string, int> m = {{"one", 1}, {"two", 2}, {"three", 3}};
+	
+	cout << endl;
+	PrintMap(m);
+
+	m.erase("three");
+	cout << endl;
+	PrintMap(m);
+
+	
+	vector<string> words = {"one", "two", "three", "three"};
+	map<string, int> counters;
+	for (const auto& word : words) {
+		++counters[word];
+	}
+
+	cout << endl;
+	PrintMap(counters);
 
 	return 0;
 }
