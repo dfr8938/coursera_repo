@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <map>
@@ -29,5 +30,15 @@ int main()
 
 	PrintMap(m);
 
+	cout << endl;
+
+	vector<string> words = {"one", "two", "three", "one", "one", "two"};
+
+	map<string, int> counters;
+	for (const auto& word : words) {
+		++counters[word];
+	}
+
+	PrintMap(counters);
 	return 0;
 }
