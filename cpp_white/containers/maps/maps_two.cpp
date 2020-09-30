@@ -23,6 +23,11 @@ int main()
 	};
 
 	PrintMap(m);
+	m.erase("three");
+
+	cout << endl;
+
+	PrintMap(m);
 
 	return 0;
 }
